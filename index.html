@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>MON PARKING — Application Complète de Gestion Automobile & PWA</title>
+  <meta name="description" content="Application Progressive Web App (PWA) haut de gamme pour la gestion de parking automobile : Ventes, Locations, Factures, Comptabilité, Clients et Showroom 3D.">
+  <meta name="theme-color" content="#6c5ce7">
+
+  <!-- iOS / Safari PWA support -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="MON PARKING">
+  <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+
+  <!-- Manifest PWA -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome 6 Icons CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Core Stylesheets -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/animations.css">
+
+  <!-- Three.js CDN for 3D Showroom & Interactive Car Modeling -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+  <!-- Root SPA Application Container -->
+  <div id="app">
+    <!-- Initial Loading State (Replaced immediately by App.init()) -->
+    <div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#0a0e1a;color:#fff;font-family:'Inter', sans-serif">
+      <div style="width:60px;height:60px;border-radius:16px;background:linear-gradient(135deg, #6c5ce7, #00cec9);display:flex;align-items:center;justify-content:center;font-size:1.8rem;box-shadow:0 0 30px rgba(108,92,231,0.5);margin-bottom:1.5rem" class="animate-bounce">
+        <i class="fas fa-car-side"></i>
+      </div>
+      <h2 style="font-family:'Outfit', sans-serif;font-size:1.6rem;font-weight:800;margin:0 0 8px;letter-spacing:-0.5px">MON PARKING</h2>
+      <p style="color:#8b8fa3;font-size:0.9rem;margin:0">Initialisation de l'application sécurisée...</p>
+      <div style="width:140px;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;margin-top:1.5rem">
+        <div style="width:50%;height:100%;background:linear-gradient(90deg, #6c5ce7, #00cec9);animation:loadingBar 1.5s infinite ease-in-out"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Global Toast Notification Container -->
+  <div id="notification-container" class="notification-container"></div>
+
+  <!-- Floating PWA Install Prompt Banner -->
+  <div id="pwa-install-banner" style="display:none;position:fixed;bottom:24px;right:24px;background:rgba(26,31,53,0.95);backdrop-filter:blur(20px);border:1px solid rgba(108,92,231,0.3);padding:1rem 1.25rem;border-radius:16px;box-shadow:0 12px 36px rgba(0,0,0,0.5);z-index:9999;align-items:center;gap:1rem;max-width:380px" class="animate-fade-up">
+    <div style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg, #6c5ce7, #a29bfe);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.2rem;flex-shrink:0">
+      <i class="fas fa-download"></i>
+    </div>
+    <div style="flex:1">
+      <div style="font-weight:700;font-size:0.9rem;color:#f0f0f5">Installer MON PARKING</div>
+      <div style="font-size:0.75rem;color:#8b8fa3">Utilisez l'application hors-ligne comme une application native</div>
+    </div>
+    <div style="display:flex;gap:6px">
+      <button class="btn btn-primary btn-sm" onclick="App.installPWA()">Installer</button>
+      <button class="btn btn-ghost btn-sm btn-icon" onclick="App.dismissInstallBanner()" title="Fermer">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+
+  <style>
+    @keyframes loadingBar {
+      0% { transform: translateX(-100%); }
+      50% { transform: translateX(100%); }
+      100% { transform: translateX(200%); }
+    }
+  </style>
+
+  <!-- Tesseract.js CDN for Optical Character Recognition (OCR) -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
+  <!-- Chart.js CDN for Interactive Dashboard & Financial Charts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- jsPDF & AutoTable CDN for PDF Financial & Report Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+
+  <!-- Application Logic Scripts (Strictly ordered by dependency) -->
+  <script src="js/i18n.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/a11y.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/sync.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/router.js"></script>
+  <script src="js/rates.js"></script>
+  <script src="js/audit.js"></script>
+  <script src="js/security-plates.js"></script>
+  <script src="js/plate-learning.js"></script>
+  <script src="js/subscriptions.js"></script>
+  <script src="js/plate-scanner.js"></script>
+  <script src="js/tickets.js"></script>
+  <script src="js/slots.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/photo-enhanced.js"></script>
+  <script src="js/vehicles.js"></script>
+  <script src="js/sales.js"></script>
+  <script src="js/rentals.js"></script>
+  <script src="js/invoices.js"></script>
+  <script src="js/cash-register.js"></script>
+  <script src="js/stock.js"></script>
+  <script src="js/maintenance.js"></script>
+  <script src="js/clients.js"></script>
+  <script src="js/attendance.js"></script>
+  <script src="js/employees.js"></script>
+  <script src="js/banking.js"></script>
+  <script src="js/accounting.js"></script>
+  <script src="js/reports.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/showroom3d.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

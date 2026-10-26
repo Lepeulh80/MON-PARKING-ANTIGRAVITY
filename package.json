@@ -1,0 +1,13 @@
+{
+  "name": "mon-parking",
+  "version": "1.0.0",
+  "description": "MON PARKING — Application Complète de Gestion Automobile & PWA",
+  "main": "index.html",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["parking", "pwa", "lpr", "car-management"],
+  "author": "MON PARKING",
+  "license": "ISC"
+}
